@@ -17,17 +17,17 @@ namespace TradeMod
             }
 
             string result = duplicateSellingValues(json);
+            result = capSellingValues(result);
 
             Directory.CreateDirectory(getAddonExchangesFolder());
             string path = getAddonExchangesFile();
-            
+
             using (FileStream stream = File.Create(path))
             using (StreamWriter writer = new StreamWriter(stream))
             {
                 writer.Write(result);
             }
-
-            printProgress(100);
+            
             Console.WriteLine(String.Format("{0}Modding complete. Press any key to continue...", Environment.NewLine));
             Console.ReadLine();
 
@@ -35,20 +35,20 @@ namespace TradeMod
 
         private static string duplicateSellingValues(string s)
         {
-            double progress = 0;
-            double lastProgress = -1;
+            int progress = 0;
+            int lastProgress = -1;
+            int number = 50000;
 
-
-            for (double i = 50000; i > 0; i--)
+            for (double i = number; i > 0; i--)
             {
                 string oldSubString = String.Format("\"SellPrice\":{0},", i);
                 string newSubString = String.Format("\"SellPrice\":{0},", i * 2);
                 s = s.Replace(oldSubString, newSubString);
-                progress = (((50000 - i) / 50000) * 100);
-                if (Math.Floor(progress) > lastProgress)
+                progress = Convert.ToInt32((((double)(number - i) / number) * 100));
+                if (progress > lastProgress)
                 {
-                    printProgress(Math.Floor(progress));
-                    lastProgress = Math.Floor(progress);
+                    printProgress("Doubling selling prices", progress);
+                    lastProgress = progress;
                 }
 
             }
@@ -56,10 +56,46 @@ namespace TradeMod
             return s;
         }
 
-        private static void printProgress(double percentage)
+        private static string capSellingValues(string s)
+        {
+            int progress = 0;
+            int lastProgress = -1;
+
+            int number = 100000;
+            
+            for (int i = number; i > 0; i--)
+            {
+                if (s.Contains(String.Format("\"SellPrice\":{0},", i)))
+                {
+                    for (int j = 1; j < i; j++)
+                    {
+
+                        string oldSubString = String.Format("\"Cost\":{0},\"SellPrice\":{1},", j, i);
+                        string newSubString = String.Format("\"Cost\":{0},\"SellPrice\":{0},", j);
+
+                        if (s.Contains(oldSubString))
+                        {
+                            s = s.Replace(oldSubString, newSubString);
+                        }
+                    }
+                }
+
+                progress = Convert.ToInt32((((double)(number - i) / number) * 100));
+                if (progress > lastProgress)
+                {
+                    printProgress("Capping selling values", progress);
+                    lastProgress = progress;
+                }
+            }
+
+            return s;
+
+        }
+
+        private static void printProgress(string message, int percentage)
         {
             Console.Clear();
-            string progressMessage = String.Format("Doubling SalePrice values: {0}% complete", Math.Floor(percentage));
+            string progressMessage = String.Format("{0}: {1}% complete", message, percentage);
             Console.WriteLine(progressMessage);
         }
 
