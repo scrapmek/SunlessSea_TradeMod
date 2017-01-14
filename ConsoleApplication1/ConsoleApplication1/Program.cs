@@ -16,7 +16,7 @@ namespace TradeMod
 
             }
 
-            double saleMultiplier = 1.5;
+            double saleMultiplier = 1.75;
             string result = duplicateSellingValues(json, saleMultiplier);
             result = capSellingValues(result);
 

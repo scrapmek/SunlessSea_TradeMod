@@ -3,3 +3,4 @@ C:\Users\ScrapMek\Source\Repos\SunlessSea_TradeMod\ConsoleApplication1\ConsoleAp
 C:\Users\ScrapMek\Source\Repos\SunlessSea_TradeMod\ConsoleApplication1\ConsoleApplication1\bin\Release\SunlessSea_TradeMod.pdb
 C:\Users\ScrapMek\Source\Repos\SunlessSea_TradeMod\ConsoleApplication1\ConsoleApplication1\obj\Release\SunlessSea_TradeMod.exe
 C:\Users\ScrapMek\Source\Repos\SunlessSea_TradeMod\ConsoleApplication1\ConsoleApplication1\obj\Release\SunlessSea_TradeMod.pdb
+C:\Users\ScrapMek\Source\Repos\SunlessSea_TradeMod\ConsoleApplication1\ConsoleApplication1\obj\Release\TradeMod.csprojResolveAssemblyReference.cache
