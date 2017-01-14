@@ -16,7 +16,8 @@ namespace TradeMod
 
             }
 
-            string result = duplicateSellingValues(json);
+            double saleMultiplier = 1.5;
+            string result = duplicateSellingValues(json, saleMultiplier);
             result = capSellingValues(result);
 
             Directory.CreateDirectory(getAddonExchangesFolder());
@@ -27,13 +28,13 @@ namespace TradeMod
             {
                 writer.Write(result);
             }
-            
+
             Console.WriteLine(String.Format("{0}Modding complete. Press any key to continue...", Environment.NewLine));
             Console.ReadLine();
 
         }
 
-        private static string duplicateSellingValues(string s)
+        private static string duplicateSellingValues(string s, double salePriceMultiplier)
         {
             int progress = 0;
             int lastProgress = -1;
@@ -42,12 +43,16 @@ namespace TradeMod
             for (double i = number; i > 0; i--)
             {
                 string oldSubString = String.Format("\"SellPrice\":{0},", i);
-                string newSubString = String.Format("\"SellPrice\":{0},", i * 2);
-                s = s.Replace(oldSubString, newSubString);
+                if (s.Contains(oldSubString))
+                {
+                    string newSubString = String.Format("\"SellPrice\":{0},", i * salePriceMultiplier);
+                    s = s.Replace(oldSubString, newSubString);
+                }
+
                 progress = Convert.ToInt32((((double)(number - i) / number) * 100));
                 if (progress > lastProgress)
                 {
-                    printProgress("Doubling selling prices", progress);
+                    printProgress("Increasing cargo sale prices", progress);
                     lastProgress = progress;
                 }
 
@@ -62,7 +67,7 @@ namespace TradeMod
             int lastProgress = -1;
 
             int number = 100000;
-            
+
             for (int i = number; i > 0; i--)
             {
                 if (s.Contains(String.Format("\"SellPrice\":{0},", i)))
@@ -83,7 +88,7 @@ namespace TradeMod
                 progress = Convert.ToInt32((((double)(number - i) / number) * 100));
                 if (progress > lastProgress)
                 {
-                    printProgress("Capping selling values", progress);
+                    printProgress("Rebalancing sale prices", progress);
                     lastProgress = progress;
                 }
             }
